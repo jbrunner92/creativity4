@@ -1,8 +1,39 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
+}
+
+.large-space {
+    height: 60px;
+}
+
+div.col-sm-4 {
+    width: 255px;
+    height: 205px;
+    padding: 0px;
+}
+
+img {
+    width: 250px;
+    height: 200px;
+}
+
+#box-0, #box-1, #box-2, #box-3, #box-4, #box-5 {
+    border-bottom: 5px solid black;
+}
+
+#box-0, #box-1, #box-3, #box-4, #box-6, #box-7 {
+    border-right: 5px solid black;
+}
+
+#box-2, #box-5, #box-8 {
+    width: 250px;
+}
+
+#box-6, #box-7, #box-8 {
+    height: 200px;
 }
