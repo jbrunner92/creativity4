@@ -2,15 +2,15 @@ var express = require('express');
 var router = express.Router();
 
 let imgs = [
-        'images/image1.jpg',
+        'images/SavanahB.png',
+        'images/ScottG.jpg',
+        'images/SaraJ.png',
         'images/sa-rah-rah.jpg',
-        'images/image1.jpg',
-        'images/sa-rah-rah.jpg',
-        'images/image1.jpg',
-        'images/sa-rah-rah.jpg',
-        'images/image1.jpg',
-        'images/sa-rah-rah.jpg',
-        'images/image1.jpg',
+        'images/SaraC.png',
+        'images/ShebbyP.jpg',
+        'images/JuliaH.png',
+        'images/TylerL.png',
+        'images/AshkiaM.jpg',
     ],
     questions = [
         {
