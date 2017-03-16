@@ -99,7 +99,10 @@ let imgs = [
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    //to unrandomize the questions, comment out the line below
+    /**
+        to unrandomize the questions, comment out the line 'questions = shuffle(questions);'
+        if the right answer is not working, this may be causing issues
+    */
     questions = shuffle(questions);
 
     res.render('index', {
@@ -108,6 +111,11 @@ router.get('/', function(req, res, next) {
     });
 });
 
+/**
+    This returns a question, with the buttons that go with it.
+    the req.query.q says look at the url, and if it contains '/question?q=*', grabs the *
+    req.query.q should be a number referencing which question was asked
+*/
 router.get('/question', function(req, res, next) {
     res.setHeader('Content-type', 'application/json');
 
@@ -117,9 +125,20 @@ router.get('/question', function(req, res, next) {
 });
 
 router.post('/answer', function(req, res, next) {
+    /**
+        req.body is set in the ajax call in main.js under the alias "data = { qNum: *someNumber*, userAnswer: *userAnswer* }"
+        qNum = question number,
+        userAnswer = the answer provided
+    */
     var qNum = parseInt(req.body.qNum),
         userAnswer = req.body.userAnswer;
 
+    /*
+        a small check of whether the answers are number 8 or not. You will probably remove the
+        '|| (qNum === 8 && userAnswer.toLowerCase().indexOf(answers[qNum].toLowerCase()) > -1)' part when you do this
+        for your science class. In fact, you may change the buttons for each question to be a true or false, and the check
+        which was returned in here instead of using the qNum and userAnswers
+    */
     if ( (qNum < 8 && answers[qNum].toLowerCase() === userAnswer.toLowerCase()) ||
         (qNum === 8 && userAnswer.toLowerCase().indexOf(answers[qNum].toLowerCase()) > -1) ) {
 
@@ -135,9 +154,10 @@ router.post('/answer', function(req, res, next) {
     }
 
     res.setHeader('Content-type', 'application/json');
-    res.send(respData);
+    res.send(respData); //returns whether the user guessed right or not
 });
 
+// This function shuffles the contents of an array around, so the order is different
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 

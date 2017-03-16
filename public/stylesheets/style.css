@@ -74,6 +74,10 @@ img, .back img, .front, .back {
     border-top-left-radius: 0;
 }
 
+/*
+    these @media queries allows for us to resize based on the screen size. I've set parameters for most use cases
+    though the alignment won't be perfect on all screen sizes
+*/
 @media (max-width: 1199px){
     div.col-sm-4 {
         width: 250px;
