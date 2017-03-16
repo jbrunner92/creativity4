@@ -99,19 +99,21 @@ let imgs = [
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    //to unrandomize the questions, comment out the line below
+    questions = shuffle(questions);
+
     res.render('index', {
-        title: 'Jimmy john\'s is the best',
-        imgs: imgs,
-        questions: questions
+        title: 'Tic Tac Jeopardy Toe!',
+        imgs: imgs
     });
 });
 
 router.get('/question', function(req, res, next) {
     res.setHeader('Content-type', 'application/json');
 
-    var qNumber = Math.floor(Math.random() * (9));
+    var qNum = parseInt(req.query.q);
 
-    res.send(questions[qNumber]);
+    res.send(questions[qNum]);
 });
 
 router.post('/answer', function(req, res, next) {
@@ -135,5 +137,24 @@ router.post('/answer', function(req, res, next) {
     res.setHeader('Content-type', 'application/json');
     res.send(respData);
 });
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
 
 module.exports = router;

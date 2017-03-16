@@ -1,12 +1,14 @@
-$('.free-box').click(function() {
-    getQuestion();
+var xTurn = true;
 
-    $(this).removeClass('free-box');
+$('.info-card').click(function() {
+    if ($(this).hasClass('free-box')) {
+        getQuestion($(this));
+    }
 });
 
-function getQuestion() {
+function getQuestion($cardSelected) {
     //create new view, with different
-    $.get('/question', function(data) {
+    $.get('/question?q='+$cardSelected.attr('position'), function(data) {
         $('#questionModal').off().on('show.bs.modal', function() {
             $('#questionModal .modal-body').html(data.question);
 
@@ -19,7 +21,6 @@ function getQuestion() {
 
 
             $('.submit-response').off().click(function() {
-            console.log($(this).html(), $(this).attr('question'))
                 if (parseInt($(this).attr('question')) === 0 || parseInt($(this).attr('question')) === 4 ||
                     parseInt($(this).attr('question')) === 5) {
                     var userAnswer = $(this).html();
@@ -33,10 +34,48 @@ function getQuestion() {
                 }
 
                 $.post('/answer', data, function(result) {
+                    var player = xTurn ? 'x' : 'o';
+
                     if (result.token === 'success') {
+                        $cardSelected.removeClass('free-box');
+                        $cardSelected.children('.back').children('#' + player + '-img').css('display', 'block');
+                        $cardSelected.children('.front').css('-webkit-transform', 'rotateY(180deg)');
+                        $cardSelected.children('.back').css('-webkit-transform', 'rotateY(0)');
+                        $cardSelected.attr('x-or-o', player);
+                    }
 
+                    var playerWins = isWin(player);
+
+                    if (playerWins) {
+                        console.log("here");
+                        $('#resultModal').off().on('show.bs.modal', function() {
+                            $('#result').html('Congratulations! ' + player.toUpperCase() + ' wins!');
+                            $('#resultModal .modal-body p').html('');
+
+                            $('#resultModal').on('hide.bs.modal', function() {
+                                resetGame();
+                            })
+                        });
+
+                        $('#resultModal').modal('show');
+                        xTurn = true;
+                    } else if (xTurn) {
+                        $('#x-turn-alert').slideUp();
+                        setTimeout(function() {
+                            $('#o-turn-alert').slideDown();
+                        }, 400);
+
+                        xTurn = !xTurn;
                     } else {
+                        $('#o-turn-alert').slideUp();
+                        setTimeout(function() {
+                            $('#x-turn-alert').slideDown();
+                        }, 400);
+                        xTurn = !xTurn;
 
+                        setTimeout(function() {
+
+                        }, 5000);
                     }
                 });
             })
@@ -45,3 +84,60 @@ function getQuestion() {
         $('#questionModal').modal('show');
     });
 }
+
+function isWin(player) {
+    var rows = [],
+        rowVals = [];
+
+    $('.info-card').each(function() {
+        rowVals.push($(this).attr('x-or-o'));
+
+        if (rowVals.length === 3) {
+            rows.push(rowVals);
+            rowVals = [];
+        }
+    });
+
+    return threeInARow(rows, player);
+}
+
+function threeInARow(rows, player) {
+    if (rows[0][0] === player && rows[0][1] === player && rows[0][2] === player) {
+        return true;
+    } else if (rows[0][0] === player && rows[1][0] === player && rows[2][0] === player) {
+        return true;
+    } else if (rows[0][0] === player && rows[1][1] === player && rows[2][2] === player) {
+        return true;
+    } else if (rows[0][1] === player &&  rows[1][1] === player && rows[2][1] === player) {
+        return true;
+    } else if (rows[0][2] === player &&  rows[1][2] === player && rows[2][2] === player) {
+        return true;
+    } else if (rows[0][2] === player && rows[1][1] === player && rows[2][0] === player) {
+        return true;
+    } else if (rows[1][0] === player && rows[1][1] === player && rows[1][2] === player) {
+        return true;
+    } else if (rows[2][0] === player && rows[2][1] === player && rows[2][2] === player) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function resetGame() {
+    $('.info-card').each(function() {
+        $(this).attr('x-or-o', '-');
+
+        $(this).children('.front').css('-webkit-transform', 'rotateY(0)');
+        $(this).children('.back').css('-webkit-transform', 'rotateY(180deg)');
+
+        $(this).addClass('free-box');
+    });
+
+    $('#o-turn-alert').slideUp();
+    setTimeout(function() {
+        $('#x-turn-alert').slideDown();
+    }, 400);
+}
+
+
+resetGame();
