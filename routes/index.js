@@ -35,7 +35,7 @@ let imgs = [
             ]
         },
         {
-            question: '<h2>What is (100 / 5) + 2 % 7?</h2><input id="user-answer" type="number"/>',
+            question: '<h2>What is ((100 / 5) + 2) % 7?</h2><input id="user-answer" type="number"/>',
             btns: [
                 '<button type="button" class="btn btn-default submit-response" question="3" data-dismiss="modal">Make guess</button>'
             ]
@@ -87,7 +87,7 @@ let imgs = [
     ],
     answers = [
         'Pickles',
-        'Professor Connor',
+        'Professor Conrad',
         'Who Lives on Drury Lane?',
         '1',
         'Asian Zing',
